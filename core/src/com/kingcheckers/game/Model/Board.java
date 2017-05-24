@@ -36,5 +36,9 @@ public class Board {
                 }
             }
         }
+
+    public Box[][] getBoxes() {
+        return this.boxes;
+    }
 }
 
