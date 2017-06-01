@@ -67,8 +67,6 @@ public class Board {
 
                 }
             }
-
->>>>>>> Clickable board implemented.
         }
 
     public Box[][] getBoxes() {

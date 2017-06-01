@@ -18,21 +18,13 @@ public class KingCheckers extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture beigeBox;
 	Texture brownBox;
-	Board board;
-	int xPos;
-	int yPos;
-	
-	@Override
-	public void create () {
-		batch = new SpriteBatch();
-		beigeBox = new Texture("beigeBox.png");
-		brownBox = new Texture("brownBox.png");
 	Texture whiteRegular;
 	Texture blackRegular;
 	Board board;
+
+	OrthographicCamera camera;
 	int xPos;
 	int yPos;
-	OrthographicCamera camera;
 	
 	@Override
 	public void create () {
@@ -133,22 +125,6 @@ public class KingCheckers extends ApplicationAdapter {
 				Box b = board.getBoxes()[row][col];
 
 				if (b.getColor() == Color.WHITE) {
-					batch.draw(beigeBox, xPos, yPos);
-					xPos = xPos + 50;
-				} else {
-					batch.draw(brownBox, xPos, yPos);
-					xPos = xPos + 50;
-				}
-
-				if (col == 9) { // next row
-					yPos = yPos + 50;
-					xPos = 0;
-				}
-
-				if(row == 9 && col == 9) { // Reset positions after last row
-					xPos = 0;
-					yPos = 0;
-				}
 					batch.draw(beigeBox, b.getX(), b.getY());
 				} else {
 					batch.draw(brownBox, b.getX(), b.getY());
@@ -162,6 +138,7 @@ public class KingCheckers extends ApplicationAdapter {
 						}
 					}
 				}
+
 			}
 		}
 	}
