@@ -10,6 +10,8 @@ import com.kingcheckers.game.Screen.StartScreen;
  */
 public class KCGame extends Game {
     public static Skin skin;
+    public static int WIDTH = 800;
+    public static int HEIGHT = 600;
 
     @Override
     public void create() {

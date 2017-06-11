@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.collision.BoundingBox;
  */
 public class Box {
     private Color color;
-    private Checker checker;
+    private ActiveChecker activeChecker;
     private int x;
     private int y;
     private int width;
@@ -31,12 +31,12 @@ public class Box {
         return this.color;
     }
 
-    public void setChecker(Checker checker) {
-        this.checker = checker;
+    public void setActiveChecker(ActiveChecker activeChecker) {
+        this.activeChecker = activeChecker;
     }
 
-    public Checker getChecker() {
-        return this.checker;
+    public ActiveChecker getActiveChecker() {
+        return this.activeChecker;
     }
 
     public BoundingBox getBoundingBox() {
@@ -57,5 +57,31 @@ public class Box {
 
     public void setClicked(boolean clicked) {
         this.clicked = clicked;
+    }
+
+    public void calculateMoves(Board board) {
+        int r = 0;
+        int c = 0;
+
+        int[][] range;
+
+        for (int row = 0; row < board.getBoxes().length; row++) {
+            for (int col = 0; col < board.getBoxes()[row].length; col++) {
+                Box b = board.getBoxes()[row][col];
+
+                if(b.getX() == getX() && b.getY()  == getY()) {
+                    r = row;
+                    c = col;
+
+
+                }
+
+               // range = new int[][]
+            }
+        }
+    }
+
+    public void removeChecker() {
+        this.activeChecker = null;
     }
 }

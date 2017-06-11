@@ -1,5 +1,7 @@
 package com.kingcheckers.game.Model;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 
 /**
@@ -10,67 +12,48 @@ public class Board {
     public static final int BOARD_COLUMNS = 10;
     private int boxWidth = 50;
     private int boxHeight = 50;
-    private Box[][] boxes;
+    private int boardWidth;
+    private int boardHeight;
+    private int[][] boxes;
 
-    public Board() {
-        boxes = new Box[BOARD_ROWS][BOARD_COLUMNS];
-    }
+    public Board() {}
 
-    public void initializeBoard() {
-        int x = 0;
-        int y = 0;
-        for (int row = 0; row <= BOARD_ROWS - 1; row++) {
-            for (int column = 0; column <= BOARD_COLUMNS - 1; column++) {
+    public void loadFromFile(String boardName) {
+        /* The board and checkers are loaded from a text file
+        *  A text file with numbers representing certain elements is an easy way to mimick a board */
+        FileHandle file = Gdx.files.internal("Boards/" + boardName);
 
-                    if (row % 2 == 0) { // even rows
-                        if(column % 2 == 0) {
-                            boxes[row][column] = new Box(x, y, boxWidth, boxHeight, Color.WHITE);
-                            x = x + 50;
-                        }
-                        else {
-                            boxes[row][column] = new Box(x, y, boxWidth, boxHeight, Color.BLACK);
-                            x = x + 50;
-                        }
-
-                    } else { // uneven rows
-                        if(column % 2 == 1) {
-                            boxes[row][column] = new Box(x, y, boxWidth, boxHeight, Color.WHITE);
-                            x = x + 50;
-                        }
-                        else {
-                            boxes[row][column] = new Box(x, y, boxWidth, boxHeight, Color.BLACK);
-                            x = x + 50;
-                        }
-                    }
-
-                    if(column == 9) {
-                        y = y + 50;
-                        x = 0;
-                    }
-                }
-            }
-
-            for (int row = 0; row <= BOARD_ROWS - 1; row++) {
-                for (int column = 0; column <= BOARD_COLUMNS - 1; column++) {
-                    Box b = boxes[row][column];
-
-                    if(row < 4) {
-                        if(b.getColor() == Color.BLACK) {
-                            b.setChecker(new Checker(CheckerType.WHITE_REGULAR));
-                        }
-                    }
-                    else if(row > 5) {
-                        if(b.getColor() == Color.BLACK) {
-                            b.setChecker(new Checker(CheckerType.BLACK_REGULAR));
-                        }
-                    }
-
-                }
-            }
+        /* Reading board in and split the lines, representing rows */
+        String lines[] = file.readString().split(" #END");
+        for(int i = 0; i < lines.length; ++i) {
+            lines[i] = lines[i].replaceAll("\\s", ""); // Remove white chars
         }
 
-    public Box[][] getBoxes() {
+        boardHeight = lines.length;
+        boardWidth = lines[0].length();
+
+        boxes = new int[boardHeight][boardWidth];
+
+        for(int y = 0; y < boardHeight; ++y) {
+            for(int x = 0; x < boardWidth; ++x) {
+                /* Converting string values to int values and put them in box array */
+                boxes[x][y] = Character.getNumericValue(lines[y].charAt(x));
+            }
+        }
+    }
+
+    public int[][] getBoxes() {
         return this.boxes;
+    }
+
+    public int getWidth() { return boardWidth; }
+    public int getHeight() { return boardHeight; }
+
+    public int getValue(int x, int y) {
+        if(x >= 0 && x < getWidth() && y >= 0 && y < getHeight()) {
+            return boxes[x][y];
+        }
+        else return -1;
     }
 }
 

@@ -5,11 +5,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
+import com.kingcheckers.game.Model.ActiveChecker;
 import com.kingcheckers.game.Model.Board;
 import com.kingcheckers.game.Model.Box;
 import com.kingcheckers.game.Model.CheckerType;
@@ -19,8 +19,11 @@ public class KingCheckers extends ApplicationAdapter {
 	Texture beigeBox;
 	Texture brownBox;
 	Texture whiteRegular;
+	Texture whiteRegularSelected;
 	Texture blackRegular;
+	Texture blackRegularSelected;
 	Board board;
+	ActiveChecker selectedChecker;
 
 	OrthographicCamera camera;
 	int xPos;
@@ -35,7 +38,9 @@ public class KingCheckers extends ApplicationAdapter {
 		beigeBox = new Texture("beigeBox.png");
 		brownBox = new Texture("brownBox.png");
 		whiteRegular = new Texture("white_regular.png");
+		whiteRegularSelected = new Texture("white_regular_selected.png");
 		blackRegular = new Texture("black_regular.png");
+		blackRegularSelected = new Texture("black_regular_selected.png");
 		board = new Board();
 		board.initializeBoard();
 		xPos = 0;
@@ -73,17 +78,36 @@ public class KingCheckers extends ApplicationAdapter {
 							if (b.getBoundingBox().contains(v)) {
 								System.out.println(b.getX() + " " + b.getY());
 
-								if (!b.getClicked()) {
-									b.setClicked(true);
+									if(!b.getClicked()) {
+										b.setClicked(true);
+
+										// check if place is clicked when already a pawn was selected
+										if (selectedChecker != null && b.getActiveChecker() == null) {
+											if (selectedChecker.canMoveTo(b)) {
+												b.setActiveChecker(selectedChecker);
+
+												for (int r = 0; r < board.getBoxes().length; r++) {
+													for (int c = 0; c < board.getBoxes()[r].length; c++) {
+														Box b2 = board.getBoxes()[r][c];
+
+														if (b2.getX() == selectedChecker.getBox().getX()
+																&& b2.getY() == selectedChecker.getBox().getY()) {
+															board.getBoxes()[r][c].removeChecker();
+														}
+													}
+												}
+											}
+											b.setClicked(false);
+										} else {
+											selectedChecker = b.getActiveChecker();
+										}
+
+									}
 								}
 							}
-
 						}
-
+						return true;
 					}
-					return true;
-
-				}
 				return false;
 			}
 
@@ -115,7 +139,7 @@ public class KingCheckers extends ApplicationAdapter {
 		//Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		renderBoard();
-		//batch.draw(brownBox, 0,0);
+		renderPieces();
 		batch.end();
 	}
 
@@ -128,12 +152,29 @@ public class KingCheckers extends ApplicationAdapter {
 					batch.draw(beigeBox, b.getX(), b.getY());
 				} else {
 					batch.draw(brownBox, b.getX(), b.getY());
+				}
 
-					if(b.getChecker() != null) {
-						if(b.getChecker().getCheckerType() == CheckerType.WHITE_REGULAR) {
+			}
+		}
+	}
+
+	private void renderPieces() {
+		for (int row = 0; row < board.getBoxes().length; row++) {
+			for (int col = 0; col < board.getBoxes()[row].length; col++) {
+				Box b = board.getBoxes()[row][col];
+
+				if(b.getActiveChecker() != null) {
+					if(b.getActiveChecker().getCheckerType() == CheckerType.WHITE_REGULAR) {
+						if(b.getClicked()) {
+							batch.draw(whiteRegularSelected, b.getX(), b.getY());
+						} else {
 							batch.draw(whiteRegular, b.getX(), b.getY());
 						}
-						else if(b.getChecker().getCheckerType() == CheckerType.BLACK_REGULAR) {
+					}
+					else if(b.getActiveChecker().getCheckerType() == CheckerType.BLACK_REGULAR) {
+						if(b.getClicked()) {
+							batch.draw(blackRegularSelected, b.getX(), b.getY());
+						} else {
 							batch.draw(blackRegular, b.getX(), b.getY());
 						}
 					}
