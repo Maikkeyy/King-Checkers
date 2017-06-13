@@ -27,19 +27,12 @@ public class DrawBox extends Image {
         beigeBox = new Texture("beigeBox.png");
         brownBox = new Texture("brownBox.png");
 
-        // Setting the right texture when the draw method is called on this object
-        if(cellType == CellType.BEIGE) {
-            this.setDrawable(new SpriteDrawable(new Sprite(beigeBox)));
-        }
-        else {
-            this.setDrawable(new SpriteDrawable(new Sprite(brownBox)));
-
             // Brown boxes can be clicked for moving pieces
             this.addListener(new InputListener() {
                 public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
                     return false; /* isTouched(); */ }
             });
-        }
+
     }
 
    /* private boolean isTouched() {

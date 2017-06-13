@@ -65,7 +65,7 @@ public class Box {
 
         int[][] range;
 
-        for (int row = 0; row < board.getBoxes().length; row++) {
+       /* for (int row = 0; row < board.getBoxes().length; row++) {
             for (int col = 0; col < board.getBoxes()[row].length; col++) {
                 Box b = board.getBoxes()[row][col];
 
@@ -78,7 +78,7 @@ public class Box {
 
                // range = new int[][]
             }
-        }
+        } */
     }
 
     public void removeChecker() {

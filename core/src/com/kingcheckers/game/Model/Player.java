@@ -1,15 +1,15 @@
 package com.kingcheckers.game.Model;
 
-import com.kingcheckers.game.Screen.GameScreen;
+import com.kingcheckers.game.Screen.BattleScreen;
 
 /**
  * Created by Maikkeyy on 31-5-2017.
  */
 public class Player {
-    private GameScreen screen;
+    private BattleScreen screen;
     private PlayerSide playerSide;
 
-    public Player(GameScreen screen) {
+    public Player(BattleScreen screen) {
         this.screen = screen;
     }
 

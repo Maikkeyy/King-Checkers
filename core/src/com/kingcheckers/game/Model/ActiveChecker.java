@@ -3,7 +3,7 @@ package com.kingcheckers.game.Model;
 import com.badlogic.gdx.graphics.Color;
 import com.kingcheckers.game.GUI.DrawBox;
 import com.kingcheckers.game.GUI.DrawChecker;
-import com.kingcheckers.game.Screen.GameScreen;
+import com.kingcheckers.game.Screen.BattleScreen;
 import com.kingcheckers.game.GUI.DrawChecker.PawnType;
 
 /**
@@ -13,13 +13,13 @@ public class ActiveChecker {
     private CheckerType checkerType;
     private Box box;
 
-    private GameScreen screen;
+    private BattleScreen screen;
     private Board board;
 
     private DrawChecker selectedChecker;
     private DrawBox selectedBox;
 
-    public ActiveChecker(GameScreen screen, Board board) {
+    public ActiveChecker(BattleScreen screen, Board board) {
         this.screen = screen;
         this.board = board;
     }

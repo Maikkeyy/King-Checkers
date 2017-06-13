@@ -27,7 +27,7 @@ public class PlayerInfo extends Table {
     private Label playerName, countPawns, countKings;
     private Image pawnStandard, pawnKing;
 
-    private Drawable standard = new TextureRegionDrawable(new TextureRegion(new Texture("white-regular.png")));
+    private Drawable standard = new TextureRegionDrawable(new TextureRegion(new Texture("white_regular.png")));
     private Drawable king = new TextureRegionDrawable(new TextureRegion(new Texture("white_king.png")));
 
     public PlayerInfo(String playerName, String checkerTextureName) {

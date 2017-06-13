@@ -1,12 +1,13 @@
 package com.kingcheckers.game.Screen;
 
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kingcheckers.game.GUI.DrawBox;
 import com.kingcheckers.game.GUI.DrawChecker;
 import com.kingcheckers.game.GUI.PlayerInfo;
-import com.kingcheckers.game.KCGame;
+import com.kingcheckers.game.KingCheckers;
 import com.kingcheckers.game.Model.*;
 
 import java.util.ArrayList;
@@ -14,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by Maikkeyy on 5-6-2017.
  */
-public class GameScreen extends AbstractScreen {
+public class BattleScreen extends AbstractScreen {
     private final int maxBoardSize = 400; // based on 8x8 board
     private Board board;
     private Table boardContainer;
@@ -27,11 +28,21 @@ public class GameScreen extends AbstractScreen {
 
     private int boxSize = 50;
 
-    public GameScreen(KCGame game) {
+    public BattleScreen(KingCheckers game) {
         super(game);
         board = new Board();
         player = new Player(this);
         activeChecker = new ActiveChecker(this, board);
+    }
+
+    @Override
+    public void render(float delta) {
+        clearScreen();
+        if(Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            game.setScreen(KingCheckers.ScreenMode.MENU);
+        }
+
+        stage.draw();
     }
 
     public void startBattle(String[] playerNames, String boardName) {
@@ -54,7 +65,7 @@ public class GameScreen extends AbstractScreen {
         loadPawns();
         loadPlayerInfo(playerNames);
         countPieces();
-        player.set(Players.BRIGHT);
+        player.setPlayerSide(PlayerSide.BEIGE);
         updateActivePlayer();
     }
 
@@ -126,6 +137,18 @@ public class GameScreen extends AbstractScreen {
 
         playerBeige.setValue(pawnsBeige, pawnsBeigeKings);
         playerBrown.setValue(pawnsBrown, pawnsBrownKings);
+    }
+
+    public void updateActivePlayer() {
+        playerBeige.setColor(Color.WHITE);
+        playerBrown.setColor(Color.WHITE);
+
+        if(player.getPlayerSide() == PlayerSide.BEIGE) {
+            playerBeige.setColor(Color.YELLOW);
+        }
+        else {
+            playerBrown.setColor(Color.YELLOW);
+        }
     }
 
     private void countBoardCellSize() {

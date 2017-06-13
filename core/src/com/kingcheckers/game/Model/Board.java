@@ -24,7 +24,7 @@ public class Board {
         FileHandle file = Gdx.files.internal("Boards/" + boardName);
 
         /* Reading board in and split the lines, representing rows */
-        String lines[] = file.readString().split(" #END");
+        String lines[] = file.readString().split("#END");
         for(int i = 0; i < lines.length; ++i) {
             lines[i] = lines[i].replaceAll("\\s", ""); // Remove white chars
         }

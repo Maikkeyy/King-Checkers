@@ -2,11 +2,11 @@ package com.kingcheckers.game.Screen;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.kingcheckers.game.KCGame;
+import com.kingcheckers.game.KingCheckers;
 
 /**
  * Created by Maikkeyy on 5-6-2017.
@@ -15,9 +15,9 @@ public abstract class AbstractScreen implements Screen {
     protected OrthographicCamera camera;
     protected Stage stage;
     protected SpriteBatch spriteBatch;
-    protected KCGame game;
+    protected KingCheckers game;
 
-    public AbstractScreen(KCGame game) {
+    public AbstractScreen(KingCheckers game) {
         this.game = game;
         createCamera();
 
@@ -27,8 +27,13 @@ public abstract class AbstractScreen implements Screen {
 
     private void createCamera() {
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, KCGame.WIDTH, KCGame.HEIGHT);
+        camera.setToOrtho(false, KingCheckers.WIDTH, KingCheckers.HEIGHT);
         camera.update();
+    }
+
+    protected void clearScreen() {
+        Gdx.gl.glClearColor(0, 0, 0, 0);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
     }
 
     @Override

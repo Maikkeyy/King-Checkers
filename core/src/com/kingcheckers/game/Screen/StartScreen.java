@@ -7,7 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.kingcheckers.game.KCGame;
+import com.kingcheckers.game.KingCheckers;
 
 /**
  * Created by Mike on 24-5-2017.
@@ -22,14 +22,6 @@ public class StartScreen implements Screen {
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
 
-        Skin skin = KCGame.skin;
-
-        table = new Table(skin);
-        table.setFillParent(true);
-        stage.addActor(table);
-
-        Label lblTitle = new Label("King Checkers", skin);
-        table.add(lblTitle);
     }
 
     @Override

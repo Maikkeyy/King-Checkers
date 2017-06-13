@@ -34,31 +34,7 @@ public class DrawChecker extends Image {
         blackRegular = new Texture("black_regular.png");
         blackKing = new Texture("black_king.png");
 
-        // Setting the right activeChecker texture when the draw method is called on this object
-        if(checkerType == CheckerType.WHITE_REGULAR || checkerType == CheckerType.WHITE_KING) {
-            this.playerSide = PlayerSide.BRIGHT;
 
-            if(checkerType == CheckerType.WHITE_REGULAR) {
-                this.setDrawable(new SpriteDrawable(new Sprite(whiteRegular)));
-                type = PawnType.STANDARD;
-            }
-            else {
-                this.setDrawable(new SpriteDrawable(new Sprite(whiteKing)));
-                type = PawnType.KING;
-            }
-        }
-        else if(checkerType == CheckerType.BLACK_REGULAR || checkerType == CheckerType.BLACK_KING) {
-            this.playerSide = PlayerSide.DARK;
-
-            if(checkerType == CheckerType.BLACK_REGULAR) {
-                this.setDrawable(new SpriteDrawable(new Sprite(blackRegular)));
-                type = PawnType.STANDARD;
-            }
-            else {
-                this.setDrawable(new SpriteDrawable(new Sprite(blackKing)));
-                type = PawnType.KING;
-            }
-        }
 
         this.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
