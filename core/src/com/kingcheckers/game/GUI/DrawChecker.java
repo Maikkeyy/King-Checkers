@@ -1,11 +1,14 @@
 package com.kingcheckers.game.GUI;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kingcheckers.game.Model.*;
 
 /**
@@ -34,7 +37,25 @@ public class DrawChecker extends Image {
         blackRegular = new Texture("black_regular.png");
         blackKing = new Texture("black_king.png");
 
+        // 2 is beige and 3 is brown
+        if(checkerType == 2 || checkerType == 4) {
+            this.playerSide = PlayerSide.BEIGE;
 
+            if(checkerType == 2) {
+                this.setDrawable(new TextureRegionDrawable(new Sprite(whiteRegular)));
+                type = PawnType.STANDARD;
+            }
+           // else setAsKing();
+        }
+        else if(checkerType == 3 || checkerType == 5) {
+            this.playerSide = PlayerSide.BROWN;
+
+            if(checkerType == 3) {
+                this.setDrawable(new TextureRegionDrawable(new Sprite(blackRegular)));
+                type = PawnType.STANDARD;
+            }
+           // else setAsKing();
+        }
 
         this.addListener(new InputListener() {
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
@@ -42,6 +63,15 @@ public class DrawChecker extends Image {
             }});
 
     }
+
+    @Override
+    public void draw(Batch batch, float parentAlpha) {
+        super.draw(batch, parentAlpha);
+        if(this.getActions().size > 0) {
+            this.act(Gdx.graphics.getDeltaTime());
+        }
+    }
+
 
     private boolean isTouched() {
         if(originalPlayer.getPlayerSide() == playerSide) {
@@ -51,11 +81,23 @@ public class DrawChecker extends Image {
                 activeChecker.unselect();
             }
             else {
+                activeChecker.unselect(); // unselect rest of checkers, so only one can be selected
                 activeChecker.select(this);
             }
         }
         return false;
     }
+
+    public void setAsKing() {
+        type = PawnType.KING;
+        if(playerSide == PlayerSide.BEIGE) {
+           // this.setDrawable(TextureLoader.getDrawable("pawnBrightKing")); TODO
+        }
+       // else this.setDrawable(TextureLoader.getDrawable("pawnDarkKing")); TODO
+    }
+
+    public void setBoardPosition(BoardPosition pos) { setBoardPosition(pos.x, pos.y); }
+    public void setBoardPosition(int x, int y) { boardPos.setPosition(x, y); }
 
     public BoardPosition getBoardPosition() {
         return boardPos;
@@ -67,5 +109,14 @@ public class DrawChecker extends Image {
 
     public PlayerSide getPlayerSide() {
         return this.playerSide;
+    }
+
+    public int getPlayerInt() {
+        if(playerSide == PlayerSide.BEIGE) {
+            return 2;
+        }
+        else {
+            return 3;
+        }
     }
 }

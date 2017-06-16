@@ -20,4 +20,15 @@ public class Player {
     public void setPlayerSide(PlayerSide playerSide) {
         this.playerSide = playerSide;
     }
+
+    public void change() {
+        if(playerSide == PlayerSide.BEIGE) {
+            playerSide = PlayerSide.BROWN;
+        }
+        else playerSide = PlayerSide.BEIGE;
+
+        if(screen != null) {
+            screen.updateActivePlayer();
+        }
+    }
 }

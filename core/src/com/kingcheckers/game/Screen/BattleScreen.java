@@ -3,6 +3,7 @@ package com.kingcheckers.game.Screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kingcheckers.game.GUI.DrawBox;
 import com.kingcheckers.game.GUI.DrawChecker;
@@ -46,10 +47,7 @@ public class BattleScreen extends AbstractScreen {
     }
 
     public void startBattle(String[] playerNames, String boardName) {
-        /*// Clear screen of actors from other game states
-        for(Actor act : stage.getActors()) {
-            act.remove();
-        }*/
+        // Clear screen of actors from other game states
 
         boardContainer = new Table();
         boardContainer.setFillParent(true);
@@ -61,6 +59,10 @@ public class BattleScreen extends AbstractScreen {
 
         checkers = new ArrayList<DrawChecker>();
         stage.addActor(boardContainer);
+
+        /* Call validate, so information about child elements will be cached
+        and that information can be accessed from methods that compare local coords to parent coords */
+        boardContainer.validate();
 
         loadPawns();
         loadPlayerInfo(playerNames);
@@ -159,6 +161,18 @@ public class BattleScreen extends AbstractScreen {
         while(board.getHeight() * boxSize > maxBoardSize) {
             boxSize -= 1;
         }
+    }
+
+    public void removePawn(int x, int y) {
+        for(int i = 0; i < checkers.size(); ++i) {
+            if(checkers.get(i).getBoardPosition().isEqual(x, y)) {
+                checkers.get(i).remove(); // remove actor from parent
+                checkers.remove(i); // remove actor from checkerlist
+                break;
+            }
+        }
+        countPieces();
+       // checkEndGame(); TODO
     }
 
     public DrawBox getBox(BoardPosition pos) {

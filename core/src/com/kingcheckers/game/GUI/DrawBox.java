@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kingcheckers.game.Model.ActiveChecker;
 import com.kingcheckers.game.Model.BoardPosition;
 import com.kingcheckers.game.Model.CellType;
@@ -19,42 +20,53 @@ public class DrawBox extends Image {
     private BoardPosition boardPos;
     private Texture beigeBox;
     private Texture brownBox;
+    private Player player;
 
     private ActiveChecker activeChecker;
 
     public DrawBox(Player player, ActiveChecker activeChecker, int boxType, int x, int y) {
         boardPos = new BoardPosition(x, y);
+        this.player = player;
+        this.activeChecker = activeChecker;
         beigeBox = new Texture("beigeBox.png");
         brownBox = new Texture("brownBox.png");
 
+        if(boxType == 0) {
+            this.setDrawable(new TextureRegionDrawable(new Sprite(beigeBox)));
+        }
+        else {
+            this.setDrawable(new TextureRegionDrawable(new Sprite(brownBox)));
+
             // Brown boxes can be clicked for moving pieces
             this.addListener(new InputListener() {
-                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                    return false; /* isTouched(); */ }
+                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                    return isTouched();
+                }
             });
+        }
 
     }
 
-   /* private boolean isTouched() {
+    private boolean isTouched() {
         if(activeChecker.isSelected()) {
-            if(activeChecker.canMove(this)) {
+            if(activeChecker.canMoveTo(this)) {
                 System.out.println("Moved pawn to position: " + boardPos);
-                activePawn.move(getPosition(), boardPos);
-                activePawn.unselect();
+                activeChecker.move(getPosition(), boardPos);
+                activeChecker.unselect();
                 player.change();
             }
-            else if(activePawn.canCapturePawn(boardPos)) {
+            else if(activeChecker.canCapturePawn(boardPos)) {
                 System.out.println("Moved pawn to position: " + boardPos + " - PAWN CAPTURED");
-                activePawn.captureAndMove(getPosition(), boardPos);
+                activeChecker.captureAndMove(getPosition(), boardPos);
 
-                if(!activePawn.anyCapturesLeft()) {
-                    activePawn.unselect();
+                if(!activeChecker.anyCapturesLeft()) {
+                    activeChecker.unselect();
                     player.change();
                 }
             }
         }
         return false;
-    } */
+    }
 
     public BoardPosition getBoardPosition() { return boardPos; }
 

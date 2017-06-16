@@ -49,6 +49,25 @@ public class Board {
     public int getWidth() { return boardWidth; }
     public int getHeight() { return boardHeight; }
 
+    public void setValue(BoardPosition pos, int val) {
+        setValue(pos.x, pos.y, val);
+    }
+
+    public void setValue(int x, int y, int val) {
+        if(getValue(x, y) != -1) {
+            boxes[x][y] = val;
+        }
+    }
+
+    public int getValue(BoardPosition pos) { return getValue(pos.x, pos.y); }
+
+    public PlayerSide getCheckerPlayer(BoardPosition pos) { return getCheckerPlayer(pos.x, pos.y); }
+
+    public PlayerSide getCheckerPlayer(int x, int y) {
+        if(getValue(x,y) == 2 || getValue(x,y) == 4) return PlayerSide.BEIGE;
+        else return PlayerSide.BROWN;
+    }
+
     public int getValue(int x, int y) {
         if(x >= 0 && x < getWidth() && y >= 0 && y < getHeight()) {
             return boxes[x][y];
