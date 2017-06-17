@@ -4,6 +4,8 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.math.collision.BoundingBox;
 
+import java.io.Serializable;
+
 /**
  * Created by Maikkeyy on 7-5-2017.
  */
@@ -14,7 +16,7 @@ public class Box {
     private int y;
     private int width;
     private int height;
-    private BoundingBox boundingBox;
+    private transient BoundingBox boundingBox;
     private boolean clicked;
 
     public Box(int x, int y, int width, int height, Color color) {

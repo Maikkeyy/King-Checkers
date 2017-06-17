@@ -1,5 +1,12 @@
 package com.kingcheckers.game.RMI;
 
+import com.badlogic.gdx.math.Vector2;
+import com.kingcheckers.game.GUI.DrawChecker;
+import com.kingcheckers.game.Model.BoardPosition;
+import fontyspublisher.IRemotePropertyListener;
+import fontyspublisher.IRemotePublisherForDomain;
+import fontyspublisher.IRemotePublisherForListener;
+
 import java.beans.PropertyChangeEvent;
 import java.rmi.NoSuchObjectException;
 import java.rmi.NotBoundException;
@@ -40,8 +47,20 @@ public class Communicator extends UnicastRemoteObject
     @Override
     public void propertyChange(PropertyChangeEvent evt) throws RemoteException {
         String property = evt.getPropertyName();
-        ClickEvent clickEvent = (ClickEvent) evt.getNewValue();
-        client.requestPrintClick(property, clickEvent);
+
+        if(property.equals("select")) {
+            BoardPosition boardPos = (BoardPosition) evt.getNewValue();
+            client.requestSelectChecker(property, boardPos);
+        }
+        else if(property.equals("move")) {
+            MoveEvent moveEvent = (MoveEvent) evt.getNewValue();
+            client.requestMovePiece(property, moveEvent);
+        }
+        else if(property.equals("capture")) {
+            MoveEvent moveEvent = (MoveEvent) evt.getNewValue();
+            client.requestCapturePiece(property, moveEvent);
+        }
+
     }
 
     /**
@@ -49,7 +68,7 @@ public class Communicator extends UnicastRemoteObject
      */
     public void connectToPublisher() {
         try {
-            Registry registry = LocateRegistry.getRegistry("192.168.1.8", portNumber);
+            Registry registry = LocateRegistry.getRegistry("127.0.0.1", portNumber);
             publisherForDomain = (IRemotePublisherForDomain) registry.lookup(bindingName);
             publisherForListener = (IRemotePublisherForListener) registry.lookup(bindingName);
             connected = true;
@@ -99,15 +118,15 @@ public class Communicator extends UnicastRemoteObject
     /**
      * Broadcast click event.
      * @param property  color of draw event
-     * @param clickEvent click event
+     * @param moveEvent checker
      */
-    public void broadcast(String property, ClickEvent clickEvent) {
+    public void broadcast(String property, MoveEvent moveEvent) {
         if (connected) {
             threadPool.execute(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        publisherForDomain.inform(property,null, clickEvent);
+                        publisherForDomain.inform(property, null, moveEvent);
                     } catch (RemoteException ex) {
                         Logger.getLogger(Communicator.class.getName()).log(Level.SEVERE, null, ex);
                     }
@@ -116,24 +135,19 @@ public class Communicator extends UnicastRemoteObject
         }
     }
 
-    /**
-     * Stop communicator.
-     */
-    public void stop() {
+    public void broadcast(String property, BoardPosition boardPos) {
         if (connected) {
-            try {
-                publisherForListener.unsubscribeRemoteListener(this, null);
-            } catch (RemoteException ex) {
-                Logger.getLogger(Communicator.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-        try {
-            UnicastRemoteObject.unexportObject(this, true);
-        } catch (NoSuchObjectException ex) {
-            Logger.getLogger(Communicator.class.getName()).log(Level.SEVERE, null, ex);
+            threadPool.execute(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        publisherForDomain.inform(property, null, boardPos);
+                    } catch (RemoteException ex) {
+                        Logger.getLogger(Communicator.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            });
         }
     }
-
-
 }
 

@@ -13,6 +13,8 @@ import com.badlogic.gdx.utils.Align;
 import com.kingcheckers.game.Utils.Font;
 import com.kingcheckers.game.Utils.TextureLoader;
 
+import java.io.Serializable;
+
 /**
  * Created by Maikkeyy on 11-6-2017.
  */

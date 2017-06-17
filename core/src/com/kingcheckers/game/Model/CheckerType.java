@@ -1,5 +1,7 @@
 package com.kingcheckers.game.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by Maikkeyy on 31-5-2017.
  */

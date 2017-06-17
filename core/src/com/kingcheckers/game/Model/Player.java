@@ -2,6 +2,8 @@ package com.kingcheckers.game.Model;
 
 import com.kingcheckers.game.Screen.BattleScreen;
 
+import java.io.Serializable;
+
 /**
  * Created by Maikkeyy on 31-5-2017.
  */

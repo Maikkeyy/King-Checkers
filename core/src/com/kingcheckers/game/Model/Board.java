@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 
+import java.io.Serializable;
+
 /**
  * Created by Maikkeyy on 7-5-2017.
  */

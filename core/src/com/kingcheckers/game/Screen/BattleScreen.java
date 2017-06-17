@@ -10,7 +10,9 @@ import com.kingcheckers.game.GUI.DrawChecker;
 import com.kingcheckers.game.GUI.PlayerInfo;
 import com.kingcheckers.game.KingCheckers;
 import com.kingcheckers.game.Model.*;
+import com.kingcheckers.game.RMI.Client;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -19,7 +21,7 @@ import java.util.ArrayList;
 public class BattleScreen extends AbstractScreen {
     private final int maxBoardSize = 400; // based on 8x8 board
     private Board board;
-    private Table boardContainer;
+    private  Table boardContainer;
     private DrawBox[][] drawBoxes;
     private ArrayList<DrawChecker> checkers;
     private Player player;
@@ -27,13 +29,18 @@ public class BattleScreen extends AbstractScreen {
 
     private PlayerInfo playerBrown, playerBeige;
 
+    // RMI properties
+    private Client client;
+
     private int boxSize = 50;
 
-    public BattleScreen(KingCheckers game) {
+    public BattleScreen(KingCheckers game, Client client) {
         super(game);
+        this.client = client;
         board = new Board();
         player = new Player(this);
         activeChecker = new ActiveChecker(this, board);
+        client.setBattleScreen(this);
     }
 
     @Override
@@ -79,7 +86,7 @@ public class BattleScreen extends AbstractScreen {
 
         for(int y = 0; y < height; ++y) {
             for(int x = 0; x < width; ++x) {
-                drawBoxes[x][y] = new DrawBox(player, activeChecker, board.getValue(x, y), x, y);
+                drawBoxes[x][y] = new DrawBox(player, activeChecker, client, board.getValue(x, y), x, y);
                 /* A cell<DrawBox> is added to the table, the type which fills the cell must be an Actor
                    The .size method sets boxSize as the only accepted value for the DrawBox, which inherits from Image,
                    which in turn inherits from Actor
@@ -96,7 +103,7 @@ public class BattleScreen extends AbstractScreen {
                 int boardVal = board.getValue(x, y);
 
                 if(boardVal != 0 && boardVal != 1) {
-                    DrawChecker drawChecker = new DrawChecker(player, activeChecker, boardVal, x, y);
+                    DrawChecker drawChecker = new DrawChecker(player, activeChecker, client, boardVal, x, y);
                     // Set position of Actor(Image) on the screen with the coords of the real drawed images
                     drawChecker.setPosition(drawBoxes[x][y].getPosition().x, drawBoxes[x][y].getPosition().y);
                     drawChecker.setSize(boxSize, boxSize);
@@ -177,5 +184,23 @@ public class BattleScreen extends AbstractScreen {
 
     public DrawBox getBox(BoardPosition pos) {
         return drawBoxes[pos.x][pos.y];
+    }
+
+    public ActiveChecker getActiveChecker() {
+        return this.activeChecker;
+    }
+
+    public Player getPlayer() {
+        return this.player;
+    }
+
+    public DrawChecker getDrawChecker(BoardPosition boardPos) {
+        for(DrawChecker chkr : checkers) {
+            if(chkr.getBoardPosition().x == boardPos.x && chkr.getBoardPosition().y == boardPos.y) {
+                return chkr;
+            }
+        }
+
+        return null;
     }
 }

@@ -8,6 +8,8 @@ import com.kingcheckers.game.GUI.DrawChecker;
 import com.kingcheckers.game.Screen.BattleScreen;
 import com.kingcheckers.game.GUI.DrawChecker.PawnType;
 
+import java.io.Serializable;
+
 /**
  * Created by Maikkeyy on 31-5-2017.
  */

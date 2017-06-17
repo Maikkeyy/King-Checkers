@@ -12,6 +12,9 @@ import com.kingcheckers.game.Model.ActiveChecker;
 import com.kingcheckers.game.Model.BoardPosition;
 import com.kingcheckers.game.Model.CellType;
 import com.kingcheckers.game.Model.Player;
+import com.kingcheckers.game.RMI.Client;
+
+import java.io.Serializable;
 
 /**
  * Created by Maikkeyy on 5-6-2017.
@@ -22,12 +25,16 @@ public class DrawBox extends Image {
     private Texture brownBox;
     private Player player;
 
+    // RMI properties
+    private Client client;
+
     private ActiveChecker activeChecker;
 
-    public DrawBox(Player player, ActiveChecker activeChecker, int boxType, int x, int y) {
+    public DrawBox(Player player, ActiveChecker activeChecker, Client client, int boxType, int x, int y) {
         boardPos = new BoardPosition(x, y);
         this.player = player;
         this.activeChecker = activeChecker;
+        this.client = client;
         beigeBox = new Texture("beigeBox.png");
         brownBox = new Texture("brownBox.png");
 
@@ -50,19 +57,13 @@ public class DrawBox extends Image {
     private boolean isTouched() {
         if(activeChecker.isSelected()) {
             if(activeChecker.canMoveTo(this)) {
-                System.out.println("Moved pawn to position: " + boardPos);
-                activeChecker.move(getPosition(), boardPos);
-                activeChecker.unselect();
-                player.change();
+
+                // RMI
+                client.broadcastMovePiece("move", getPosition(), boardPos);
             }
             else if(activeChecker.canCapturePawn(boardPos)) {
-                System.out.println("Moved pawn to position: " + boardPos + " - PAWN CAPTURED");
-                activeChecker.captureAndMove(getPosition(), boardPos);
-
-                if(!activeChecker.anyCapturesLeft()) {
-                    activeChecker.unselect();
-                    player.change();
-                }
+                // RMI
+                client.broadcastCapturePiece("capture", getPosition(), boardPos);
             }
         }
         return false;

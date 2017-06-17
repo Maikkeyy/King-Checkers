@@ -17,6 +17,10 @@ public abstract class AbstractScreen implements Screen {
     protected SpriteBatch spriteBatch;
     protected KingCheckers game;
 
+    public AbstractScreen() {
+
+    }
+
     public AbstractScreen(KingCheckers game) {
         this.game = game;
         createCamera();

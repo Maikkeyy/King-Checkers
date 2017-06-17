@@ -1,6 +1,7 @@
 package com.kingcheckers.game;
 
 import com.badlogic.gdx.Game;
+import com.kingcheckers.game.RMI.Client;
 import com.kingcheckers.game.Screen.BattleScreen;
 import com.kingcheckers.game.Screen.MenuScreen;
 import com.kingcheckers.game.Screen.StartScreen;
@@ -18,10 +19,13 @@ public class KingCheckers extends Game {
     private StartScreen start;
     private BattleScreen battle;
 
+    private Client client;
+
     @Override
     public void create() {
+        this.client = new Client();
         this.menu = new MenuScreen(this);
-        this.battle = new BattleScreen(this);
+        this.battle = new BattleScreen(this, client);
         this.start = new StartScreen(this);
         this.setScreen(menu);
     }

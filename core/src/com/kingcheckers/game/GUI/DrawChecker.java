@@ -10,6 +10,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kingcheckers.game.Model.*;
+import com.kingcheckers.game.RMI.Client;
+
+import java.io.Serializable;
 
 /**
  * Created by Maikkeyy on 5-6-2017.
@@ -28,9 +31,13 @@ public class DrawChecker extends Image {
     private PlayerSide playerSide;
     private ActiveChecker activeChecker;
 
-    public DrawChecker(Player player, ActiveChecker activeChecker, int checkerType, int x, int y) {
+    // RMI properties
+    private Client client;
+
+    public DrawChecker(Player player, ActiveChecker activeChecker, Client client, int checkerType, int x, int y) {
         originalPlayer = player;
         this.activeChecker = activeChecker;
+        this.client = client;
         boardPos = new BoardPosition(x, y);
         whiteRegular = new Texture("white_regular.png");
         whiteKing = new Texture("white_king.png");
@@ -72,18 +79,16 @@ public class DrawChecker extends Image {
         }
     }
 
-
     private boolean isTouched() {
         if(originalPlayer.getPlayerSide() == playerSide) {
-            System.out.println("Pressed pawn on position: " + boardPos);
-
             if(activeChecker.getDrawChecker() == this) {
-                activeChecker.unselect();
+                client.broadcastSelectChecker("select", getBoardPosition());
             }
             else {
-                activeChecker.unselect(); // unselect rest of checkers, so only one can be selected
-                activeChecker.select(this);
+                client.broadcastSelectChecker("select", getBoardPosition());
             }
+
+
         }
         return false;
     }

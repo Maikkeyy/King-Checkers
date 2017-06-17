@@ -1,9 +1,11 @@
 package com.kingcheckers.game.Model;
 
+import java.io.Serializable;
+
 /**
  * Created by Maikkeyy on 1-6-2017.
  */
-public class BoardPosition {
+public class BoardPosition implements Serializable {
     public int x, y;
 
     public BoardPosition() { this.setPosition(0,0); }
